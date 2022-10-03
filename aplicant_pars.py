@@ -25,7 +25,7 @@ class AplicantShop:
         sleep(7)
         check_new = driver.find_element(By.CLASS_NAME, 'shop-list') \
             .find_elements(By.CLASS_NAME, 'react-multi-carousel-item')
-        if len(check_new) > 60:
+        if len(check_new) > 61:
             print(f'CHECK APLICANT!!! {len(check_new)}')
             telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID, f'CHECK APLICANT!!! {len(check_new)}')
 

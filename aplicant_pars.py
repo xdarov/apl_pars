@@ -21,19 +21,20 @@ class AplicantShop:
         button.click()
 
     @classmethod
-    def check_shop(cls, driver):
+    def check_shop(cls, driver, count=0):
         sleep(7)
         check_new = driver.find_element(By.CLASS_NAME, 'shop-list') \
             .find_elements(By.CLASS_NAME, 'react-multi-carousel-item')
         print(len(check_new))
-        if len(check_new) > 61:
+        if count == 0:
+            count = len(check_new)
+        if len(check_new) != count:
             print(f'CHECK APLICANT!!! {len(check_new)}')
-            telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID, f'CHECK APLICANT!!! {len(check_new)}')
-
+            for id in config.CHAT_ID:
+                telebot.TeleBot(config.TOKEN).send_message(id, f'CHECK APLICANT!!! {len(check_new)}')
 
     @classmethod
     def pars_run(cls):
-        
         while True:
             try:
                 options = Options()
@@ -60,5 +61,4 @@ class AplicantShop:
                     pass
 
 if __name__ == '__main__':
-     
     AplicantShop.pars_run()

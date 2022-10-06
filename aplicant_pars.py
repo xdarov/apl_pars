@@ -11,6 +11,8 @@ import os
 
 class AplicantShop:
 
+    count = 0
+
     @classmethod
     def authorization(cls, driver):
         email = driver.find_element(By.XPATH, '//*[@id="email"]')
@@ -21,15 +23,15 @@ class AplicantShop:
         button.click()
 
     @classmethod
-    def check_shop(cls, driver, count=0):
+    def check_shop(cls, driver):
         sleep(7)
         check_new = driver.find_element(By.CLASS_NAME, 'shop-list') \
             .find_elements(By.CLASS_NAME, 'react-multi-carousel-item')
         print(len(check_new))
-        if count == 0:
-            count = len(check_new)
-            telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID[0], f'CHECK VALUE IS {count}')
-        if len(check_new) != count:
+        if cls.count == 0:
+            cls.count = len(check_new)
+            telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
+        if len(check_new) != cls.count:
             print(f'CHECK APLICANT!!! {len(check_new)}')
             for id in config.CHAT_ID:
                 telebot.TeleBot(config.TOKEN).send_message(id, f'CHECK APLICANT!!! {len(check_new)}')

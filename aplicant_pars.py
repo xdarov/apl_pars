@@ -10,7 +10,6 @@ import config
 import os
 
 class AplicantShop:
-
     count = 0
 
     @classmethod
@@ -32,9 +31,10 @@ class AplicantShop:
             cls.count = len(check_new)
             telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
         if len(check_new) != cls.count:
-            print(f'CHECK APLICANT!!! {len(check_new)}')
+            cls.count = len(check_new)
+            print(f'CHECK APLICANT!!! {cls.count}')
             for id in config.CHAT_ID:
-                telebot.TeleBot(config.TOKEN).send_message(id, f'CHECK APLICANT!!! {len(check_new)}')
+                telebot.TeleBot(config.TOKEN).send_message(id, f'CHECK APLICANT!!! {cls.count}')
 
     @classmethod
     def pars_run(cls):

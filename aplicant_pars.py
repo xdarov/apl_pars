@@ -47,11 +47,15 @@ class AplicantShop:
                 driver.get('https://applicant.21-school.ru/shop')
                 sleep(5)
                 cls.authorization(driver)
+                restart = 0
                 while True:
                     try:
                         sleep(10)
                         driver.refresh()
                         cls.check_shop(driver)
+                        restart += 1
+                        if restart >= 10:
+                            raise StopIteration('Restart')
                     except (NoSuchElementException, TimeoutException) as e:
                         print(f'-->ERROR<-- {e}')
             except Exception as e:

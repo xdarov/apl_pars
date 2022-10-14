@@ -9,6 +9,7 @@ import telebot
 import config
 import os
 
+
 class AplicantShop:
     count = 0
 
@@ -18,7 +19,8 @@ class AplicantShop:
         email.send_keys(config.email)
         password = driver.find_element(By.XPATH, '//*[@id="password"]')
         password.send_keys(config.password)
-        button = driver.find_element(By.XPATH, '/html/body/div/div[2]/div/div/form/div[3]/button[1]')
+        button = driver.find_element(
+            By.XPATH, '/html/body/div/div[2]/div/div/form/div[3]/button[1]')
         button.click()
 
     @classmethod
@@ -29,19 +31,22 @@ class AplicantShop:
         print(len(check_new))
         if cls.count == 0:
             cls.count = len(check_new)
-            telebot.TeleBot(config.TOKEN).send_message(config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
+            telebot.TeleBot(config.TOKEN).send_message(
+                config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
         if len(check_new) != cls.count:
             cls.count = len(check_new)
             print(f'CHECK APLICANT!!! {cls.count}')
             for id in config.CHAT_ID:
-                telebot.TeleBot(config.TOKEN).send_message(id, f'CHECK APLICANT!!! {cls.count}')
+                telebot.TeleBot(config.TOKEN).send_message(
+                    id, f'CHECK APLICANT!!! {cls.count}')
 
     @classmethod
     def pars_run(cls):
         while True:
             try:
                 options = Options()
-                options.set_preference("general.useragent.override", config.user_agent)
+                options.set_preference(
+                    "general.useragent.override", config.user_agent)
                 driver = Firefox(options=options)
                 driver.set_page_load_timeout(7)
                 driver.get('https://applicant.21-school.ru/shop')
@@ -58,14 +63,18 @@ class AplicantShop:
                             raise StopIteration('Restart')
                     except (NoSuchElementException, TimeoutException) as e:
                         print(f'-->ERROR<-- {e}')
+            except StopIteration:
+                pass
             except Exception as e:
                 print(f'-->ERROR<-- {e}')
-                os.system(f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
+                os.system(
+                    f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
             finally:
                 try:
                     driver.close()
                 except NoSuchWindowException:
                     pass
+
 
 if __name__ == '__main__':
     AplicantShop.pars_run()

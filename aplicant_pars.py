@@ -60,8 +60,10 @@ class AplicantShop:
                         except (NoSuchElementException, TimeoutException) as e:
                             print(f'-->ERROR<-- {e}')
                     raise StopIteration("RESTART")
+                except StopIteration as e:
+                    print(e)
                 except Exception as e:
-                    print(f'-->ERROR<-- {e}')
+                    print(f'-->ERROR<-- {e} --> {type(e)}')
                     os.system(
                         f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
                 finally:

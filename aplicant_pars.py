@@ -33,7 +33,7 @@ class AplicantShop:
             cls.count = len(check_new)
             telebot.TeleBot(config.TOKEN).send_message(
                 config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
-        if len(check_new) != cls.count:
+        if (len(check_new) := len_check_new) != cls.count and len_check_new != 0:
             cls.count = len(check_new)
             print(f'CHECK APLICANT!!! {cls.count}')
             for id in config.CHAT_ID:

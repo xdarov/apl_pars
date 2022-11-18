@@ -42,35 +42,36 @@ class AplicantShop:
 
     @classmethod
     def pars_run(cls):
-            while True:
-                try:
-                    options = Options()
-                    options.set_preference(
-                        "general.useragent.override", config.user_agent)
-                    driver = Firefox(options=options)
-                    driver.set_page_load_timeout(7)
-                    driver.get('https://applicant.21-school.ru/shop')
-                    sleep(5)
-                    cls.authorization(driver)
-                    for i in range(10):
-                        try:
-                            sleep(10)
-                            driver.refresh()
-                            cls.check_shop(driver)
-                        except (NoSuchElementException, TimeoutException) as e:
-                            print(f'-->ERROR<-- {e}')
-                    raise StopIteration("RESTART")
-                except StopIteration as e:
-                    print(e)
-                except Exception as e:
-                    print(f'-->ERROR<-- {e} --> {type(e)}')
-                    os.system(
-                        f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
-                finally:
+        while True:
+            try:
+                options = Options()
+                options.set_preference(
+                    "general.useragent.override", config.user_agent)
+                driver = Firefox(options=options)
+                driver.set_page_load_timeout(7)
+                driver.get('https://applicant.21-school.ru/shop')
+                sleep(5)
+                cls.authorization(driver)
+                for i in range(10):
                     try:
-                        driver.close()
-                    except NoSuchWindowException:
-                        pass
+                        sleep(10)
+                        driver.refresh()
+                        cls.check_shop(driver)
+                    except (NoSuchElementException, TimeoutException) as e:
+                        print(f'-->ERROR<-- {e}')
+                raise StopIteration("RESTART")
+            except StopIteration as e:
+                os.system(
+                    f"echo {e} >> LOG.txt")
+            except Exception as e:
+                print(f'-->ERROR<-- {e} --> {type(e)}')
+                os.system(
+                    f"echo '{datetime.now()} -->ERROR<-- {e} --> {type(e)}' >> LOG.txt")
+            finally:
+                try:
+                    driver.close()
+                except NoSuchWindowException:
+                    pass
 
 
 if __name__ == '__main__':

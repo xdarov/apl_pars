@@ -26,15 +26,15 @@ class AplicantShop:
     @classmethod
     def check_shop(cls, driver):
         sleep(7)
-        check_new = driver.find_element(By.CLASS_NAME, 'shop-list') \
+        page_elements = driver.find_element(By.CLASS_NAME, 'shop-list') \
             .find_elements(By.CLASS_NAME, 'react-multi-carousel-item')
-        print(len(check_new))
+        # print(len(page_elements))
         if cls.count == 0:
-            cls.count = len(check_new)
+            cls.count = len(page_elements)
             telebot.TeleBot(config.TOKEN).send_message(
                 config.CHAT_ID[0], f'CHECK VALUE IS {cls.count}')
-        if (len(check_new) := len_check_new) != cls.count and len_check_new != 0:
-            cls.count = len(check_new)
+        if (count_page_elements := len(page_elements)) != cls.count and count_page_elements != 0:
+            cls.count = count_page_elements
             print(f'CHECK APLICANT!!! {cls.count}')
             for id in config.CHAT_ID:
                 telebot.TeleBot(config.TOKEN).send_message(
@@ -42,8 +42,8 @@ class AplicantShop:
 
     @classmethod
     def pars_run(cls):
-        while True:
-            try:
+        try:
+            while True:
                 options = Options()
                 options.set_preference(
                     "general.useragent.override", config.user_agent)
@@ -52,28 +52,23 @@ class AplicantShop:
                 driver.get('https://applicant.21-school.ru/shop')
                 sleep(5)
                 cls.authorization(driver)
-                restart = 0
-                while True:
+                for i in range(10):
                     try:
                         sleep(10)
                         driver.refresh()
                         cls.check_shop(driver)
-                        restart += 1
-                        if restart >= 10:
-                            raise StopIteration('Restart')
                     except (NoSuchElementException, TimeoutException) as e:
                         print(f'-->ERROR<-- {e}')
-            except StopIteration:
+                raise StopIteration("RESTART")
+        except Exception as e:
+            print(f'-->ERROR<-- {e}')
+            os.system(
+                f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
+        finally:
+            try:
+                driver.close()
+            except NoSuchWindowException:
                 pass
-            except Exception as e:
-                print(f'-->ERROR<-- {e}')
-                os.system(
-                    f"echo '{datetime.now()} -->ERROR<-- {e}' >> LOG.txt")
-            finally:
-                try:
-                    driver.close()
-                except NoSuchWindowException:
-                    pass
 
 
 if __name__ == '__main__':
